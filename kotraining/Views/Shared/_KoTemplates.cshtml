@@ -1,0 +1,69 @@
+﻿<script type="text/html" id="editabletexttemplate">
+    <span data-bind="html: data() ? data : $data.text || 'Edit',click:data.editText,visible: !data.editingText()"></span>
+    <input data-bind="value: data,event:{blur:data.stopEditingText},visible: data.editingText(),hasfocus:data.editingText(),valueUpdate: 'keyup'" type="text" style="display:inline" />
+</script>
+
+<script type="text/html" id="editableblocktexttemplate">
+    <p data-bind="html: data() ? data : $data.text || 'Edit',click:data.editText,visible: !data.editingText()"></p>
+    <textarea data-bind="value: data,event:{blur:data.stopEditingText},visible: data.editingText(),hasfocus:data.editingText(),valueUpdate: 'keyup'" style="display:inline"></textarea>
+</script>
+
+<script type="text/html" id="recentpostlistitemtemplate">
+    <li>
+        <span data-bind="text: postId"></span>
+        <span data-bind="text: title, click: $parent.postClicked"></span>
+    </li>
+</script>
+
+<script type="text/html" id="editposttemplate">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-xs-2">Title</label>
+            <div class="col-xs-10">
+                <span style="margin-top: 7px;font-weight: bold; display: inline-blocK" data-bind="template: {name: 'editabletexttemplate',data:{data: title} }"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2">Slug</label>
+            <div class="col-xs-10" style="margin-top: 7px">
+                <span data-bind="text: slug"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2">Content</label>
+            <div class="col-xs-10" style="margin-top: 7px" data-bind="template: {name: 'editableblocktexttemplate', data:{data: content}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2">Tags</label>
+            <div class="col-xs-10">
+                <input class="form-control" data-bind="value: tags, valueUpdate: 'keyup'" />
+            </div>
+        </div>
+        <div class="col-xs-10 col-xs-offset-2">
+            <!-- ko if: postId() < 1 -->
+            <div class="btn btn-default" data-bind="click: $parent.createPost">Create</div>
+            <!-- /ko -->
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="listallpostsdetailedtemplate">
+    <h2>Inlägg</h2>
+    <ul data-bind="template: { foreach: $data, name: 'detailedpostlistitemtemplate' }"></ul>
+</script>
+
+<script type="text/html" id="listpostsdetailedtemplate">
+    <h2 data-bind="visible: title,text: title"></h2>
+    <ul data-bind="template: { foreach: items, name: 'detailedpostlistitemtemplate' }"></ul>
+</script>
+
+<script type="text/html" id="detailedpostlistitemtemplate">
+    <div class="post" data-bind="click: $root.postClicked">
+        <h4 data-bind="text: title"></h4>
+        <div data-bind="foreach: displayTags">
+            <span data-bind="text: $data, click: $root.tagClicked.bind($data)"></span>
+        </div>
+        <p data-binsd="html: content"></p>
+    </div>
+</script>
