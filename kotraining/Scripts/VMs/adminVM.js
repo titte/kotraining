@@ -6,31 +6,47 @@
 
             $.ajax({
                 type: 'GET',
-                url: me.settings.rootUrl + 'api/blogpost',
-                contentType: 'application/json',
+                url: me.settings.rootUrl + 'api/site/GetCategories',
                 success: function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        me.posts.push(new PostVM(me.settings, data[i]));
-                    }
+                    me.categories(new CategoryVM(data,undefined,me.posts));
+
+                    $.ajax({
+                        type: 'GET',
+                        url: me.settings.rootUrl + 'api/blogpost',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            for (var i = 0; i < data.length; i++) {
+                                me.posts.push(new PostVM(me.settings, data[i]));
+                            }
+                        }
+                    });
                 }
             });
+        },
+        categories: ko.observable(),
+        getCategoriesTree: function(){
+            return ko.mapping.fromJS(ko.mapping.toJS(me.categories));
         },
         posts: ko.observableArray(),
         newPost: function () {
             me.setAsActive('editpost', new PostVM(me.settings));
         },
-        createPost: function (post) {
+        updatePost: function (post) {
             post.updatePost(function (data) {
-                post.postId(data.postId);
-                //editingPosts måste exekveras för att få ut underliggande objekt
-                me.posts.unshift(post);
+                if (post.postId() <= 0) {
+                    post.postId(data.postId);
+                    me.posts.unshift(post);
+                }
             })
         },
-        homeClicked: function(){
+        homeClicked: function () {
             me.setAsActive('listallpostsdetailed', me.posts);
         },
-        postClicked: function(vm){
+        postClicked: function (vm) {
             me.setAsActive('editpost', vm);
+        },
+        categoryClicked: function(category){
+            me.setAsActive('categoriespostsdetailed',category);
         },
         tagClicked: function (tag) {
             if (Object.prototype.toString.call(tag) === '[object String]') {
@@ -38,7 +54,7 @@
                     return tag === item.title;
                 })[0];
             }
-            me.setAsActive('listpostsdetailed', tag);
+            me.setAsActive('taggedpostsdetailed', tag);
         },
         editPost: function (post) {
             me.activeVM(post);

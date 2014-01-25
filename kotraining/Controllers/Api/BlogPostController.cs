@@ -11,7 +11,7 @@ using System.Web.Http.Description;
 using kotraining.Models;
 using kotraining.Context;
 
-namespace kotraining.Areas.Admin.Controllers.Api
+namespace kotraining.Controllers.Api
 {
     public class BlogPostController : ApiController
     {
@@ -20,7 +20,7 @@ namespace kotraining.Areas.Admin.Controllers.Api
         // GET api/BlogPost
         public IQueryable<Post> GetPosts()
         {
-            return db.Posts;
+            return db.Posts.OrderByDescending(p => p.CreatedOn);
         }
 
         // GET api/BlogPost/5
@@ -37,14 +37,14 @@ namespace kotraining.Areas.Admin.Controllers.Api
         }
 
         // PUT api/BlogPost/5
-        public IHttpActionResult PutPost(int id, Post post)
+        public IHttpActionResult PutPost(Post post)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != post.PostId)
+            if (post.PostId <= 0)
             {
                 return BadRequest();
             }
@@ -57,7 +57,7 @@ namespace kotraining.Areas.Admin.Controllers.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PostExists(id))
+                if (!PostExists(post.PostId))
                 {
                     return NotFound();
                 }
@@ -79,6 +79,7 @@ namespace kotraining.Areas.Admin.Controllers.Api
                 return BadRequest(ModelState);
             }
 
+            post.CreatedOn = DateTime.Now;
             db.Posts.Add(post);
             db.SaveChanges();
 

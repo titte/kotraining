@@ -1,4 +1,28 @@
-﻿<script type="text/html" id="editabletexttemplate">
+﻿<script type="text/html" id="treenodetemplate">
+    <div class="tree__node">
+        <h6>
+            <span data-bind="text: title, click: $root.categoryClicked"></span>
+            <span data-bind="visible: nodes().length > 0, click: function(){ isOpen(!isOpen());}">+</span>
+            <span class="count-cirle" data-bind="text: posts().length, click: $root.categoryClicked"></span>
+        </h6>
+        <ul data-bind="visible: isOpen() && nodes().length > 0, template: {name: 'treenodetemplate', foreach: nodes}"></ul>
+    </div>
+</script>
+
+<script type="text/html" id="categorypickernodetemplate">
+    <!-- ko foreach: data -->
+    <div class="tree__node">
+        <h6>
+            <span data-bind="text: title,click: function(){ $parent.post.category($data); }"></span>
+            <span data-bind="visible: nodes().length > 0, click: function(){ isOpen(!isOpen());}">+</span>
+            <span class="count-cirle" data-bind="text: posts().length"></span>
+        </h6>
+        <ul data-bind="visible: isOpen() && nodes().length > 0, template: {name: 'categorypickernodetemplate', data:{data: nodes, post: $parent.post}}"></ul>
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html" id="editabletexttemplate">
     <span data-bind="html: data() ? data : $data.text || 'Edit',click:data.editText,visible: !data.editingText()"></span>
     <input data-bind="value: data,event:{blur:data.stopEditingText},visible: data.editingText(),hasfocus:data.editingText(),valueUpdate: 'keyup'" type="text" style="display:inline" />
 </script>
@@ -18,32 +42,46 @@
 <script type="text/html" id="editposttemplate">
     <div class="form-horizontal">
         <div class="form-group">
-            <label class="control-label col-xs-2">Title</label>
-            <div class="col-xs-10">
+            <label class="control-label col-xs-4">Title</label>
+            <div class="col-xs-8">
                 <span style="margin-top: 7px;font-weight: bold; display: inline-blocK" data-bind="template: {name: 'editabletexttemplate',data:{data: title} }"></span>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-2">Slug</label>
-            <div class="col-xs-10" style="margin-top: 7px">
+            <label class="control-label col-xs-4">Slug</label>
+            <div class="col-xs-8" style="margin-top: 7px">
                 <span data-bind="text: slug"></span>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-2">Content</label>
-            <div class="col-xs-10" style="margin-top: 7px" data-bind="template: {name: 'editableblocktexttemplate', data:{data: content}}">
+            <label class="control-label col-xs-4">Kategori</label>
+            <div class="col-xs-8" style="margin-top: 7px">
+                <div data-bind="visible: !isEditingCategory(),click: function(){isEditingCategory(!isEditingCategory())}, text: category() ? category().title : 'Välj en kategori'"></div>
+                <div data-bind="visible: isEditingCategory">
+                    <div class="tree__node" data-bind="with: $root.getCategoriesTree()">
+                        <h6>
+                            <span data-bind="text: title,click: function(){ $parent.category($data); }"></span>
+                            <span data-bind="visible: nodes().length > 0, click: function(){ isOpen(!isOpen());}">+</span>
+                            <span class="count-cirle" data-bind="text: posts().length"></span>
+                        </h6>
+                        <ul data-bind="visible: isOpen() && nodes().length > 0, template: {name: 'categorypickernodetemplate', data:{data: nodes, post: $parent}}"></ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-2">Tags</label>
-            <div class="col-xs-10">
+            <label class="control-label col-xs-4">Content</label>
+            <div class="col-xs-8" style="margin-top: 7px" data-bind="template: {name: 'editableblocktexttemplate', data:{data: content}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-4">Tags</label>
+            <div class="col-xs-8">
                 <input class="form-control" data-bind="value: tags, valueUpdate: 'keyup'" />
             </div>
         </div>
-        <div class="col-xs-10 col-xs-offset-2">
-            <!-- ko if: postId() < 1 -->
-            <div class="btn btn-default" data-bind="click: $parent.createPost">Create</div>
-            <!-- /ko -->
+        <div class="col-xs-8 col-xs-offset-2">
+            <div class="btn btn-default" data-bind="click: $parent.updatePost">Spara</div>
         </div>
     </div>
 </script>
@@ -53,9 +91,14 @@
     <ul data-bind="template: { foreach: $data, name: 'detailedpostlistitemtemplate' }"></ul>
 </script>
 
-<script type="text/html" id="listpostsdetailedtemplate">
-    <h2 data-bind="visible: title,text: title"></h2>
+<script type="text/html" id="taggedpostsdetailedtemplate">
+    <h2 data-bind="visible: title,text: 'Inlägg taggade med: ' + title"></h2>
     <ul data-bind="template: { foreach: items, name: 'detailedpostlistitemtemplate' }"></ul>
+</script>
+
+<script type="text/html" id="categoriespostsdetailedtemplate">
+    <h2 data-bind="visible: title,text: 'Inlägg i kategorin: ' + title()"></h2>
+    <ul data-bind="template: { foreach: posts, name: 'detailedpostlistitemtemplate' }"></ul>
 </script>
 
 <script type="text/html" id="detailedpostlistitemtemplate">

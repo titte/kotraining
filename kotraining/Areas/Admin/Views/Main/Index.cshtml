@@ -1,28 +1,28 @@
 ﻿
-<div class="container">
-    <div class="row">
-        <div class="col-xs-3" id="sidebar">
-            <h4 data-bind="click: homeClicked">Home</h4>
-            <h4>Recent</h4>
-            <ul data-bind="template: {name: 'recentpostlistitemtemplate',foreach: recentPosts}"></ul>
-            <h4>Tags</h4>
-            <ul data-bind="foreach: tags">
-                <li data-bind="text: title + ' ' + items.length, click: $root.tagClicked"></li>
-            </ul>
-        </div>
-        <div class="col-xs-9" id="content" data-bind="template: {data: activeVM,name: activeVM.templateType + 'template'}">
-        </div>
-    </div>
-    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-        <ul class="nav navbar-nav">
-            <li><a href="javascript:;" data-bind="click: newPost"><i class="glyphicon glyphicon-plus-sign"></i> Create</a></li>
+<div class="site-container">
+    <div id="sidebar">
+        <a href="javascript:;" data-bind="click: newPost"><i class="glyphicon glyphicon-plus-sign"></i> Create</a>
+        <h4 data-bind="click: homeClicked">Home</h4>
+        <h4>Recent</h4>
+        <ul data-bind="template: {name: 'recentpostlistitemtemplate',foreach: recentPosts}"></ul>
+        <h4>Tags</h4>
+        <ul data-bind="foreach: tags">
+            <li data-bind="click: $root.tagClicked">
+                <span data-bind="text: title"></span>
+                <span data-bind="text: items.length" class="count-cirle"></span>
+            </li>
         </ul>
-    </nav>
+        <h4>Categories</h4>
+        <div data-bind="template: {name: 'treenodetemplate', foreach: categories}"></div>
+    </div>
+    <div id="content" data-bind="template: {data: activeVM,name: activeVM.templateType + 'template'}">
+    </div>
 </div>
 
 @section scripts {
     <script src="~/Scripts/extenders.js"></script>
     <script src="~/Scripts/VMs/PostVM.js"></script>
+    <script src="~/Scripts/VMs/CategoryVM.js"></script>
     <script src="~/Scripts/VMs/adminVM.js"></script>
     @{RenderPartialExtensions.RenderPartial(Html, "_KoTemplates");}
     <script>

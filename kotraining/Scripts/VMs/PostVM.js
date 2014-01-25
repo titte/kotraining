@@ -6,41 +6,50 @@
         me.settings = settings;
 
         me.postId = ko.observable(initPostData ? initPostData.postId : -1);
+        me.createdOn = ko.observable(initPostData ? initPostData.createdOn : new Date());
         me.title = ko.observable(initPostData ? initPostData.title : '').extend({ editableText: false });
+        me.categoryId = ko.observable(initPostData ? initPostData.categoryId : undefined);
+        me.category = ko.observable();
+        me.category.subscribe(function (newValue) {
+            me.categoryId(newValue.categoryId());
+            me.isEditingCategory(false);
+        })
+        me.isEditingCategory = ko.observable(false);
         me.slug = ko.computed(function () {
-            return me.title().replace(' ', '-');
+            var slug = me.title();
+            if (me.category())
+                (getAncestorName = function (category) {
+                    slug = category.title() + '/' + slug;
+                    var parent = ko.isObservable(category.parent) ? category.parent() : category.parent;
+                    if (parent)
+                        getAncestorName(parent);
+                })(me.category());
+            return '/' + slug.replace(' ', '-');
         });
         me.content = ko.observable(initPostData ? initPostData.content : '').extend({ editableText: false });
-        me.tags = ko.observable('');
+        me.tags = ko.observable(initPostData ? initPostData.tags : '');
         me.displayTags = ko.computed(function () {
-            return me.tags().split(',');
+            var tags = me.tags().split(',')
+            for (var i = 0; i < tags.length; i++) {
+                tags[i] = tags[i].replace(/(^[\s]+|[\s]+$)/g, '');
+            }
+            return tags;
         });
 
-        var updatePost = function (success) {
-            if (me.title())
+        me.updatePost = updatePost = function (success) {
+            if (me.title()) {
+                var data = ko.toJS(me);
+                delete data.category;
                 $.ajax({
-                    type: 'post',
+                    type: me.postId() > 0 ? 'put' : 'post',
                     url: me.settings.rootUrl + 'api/blogpost',
                     contentType: 'application/json',
                     dataType: 'json',
-                    data: ko.toJSON(me),
+                    data: ko.toJSON(data),
                     success: success
                 });
-        },
-        delayUpdate = function () {
-            setTimeout(function () {
-                if (me.postId() > 0) {
-                    updatePost();
-                }
-            }, 5000);
+            }
         };
-
-        me.title.subscribe(function () {
-            updatePost(function () {
-            });
-        });
-
-        me.updatePost = updatePost;
     };
 
     return PostVM;

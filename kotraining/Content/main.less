@@ -1,0 +1,61 @@
+﻿@color-azure: #71b1d1;
+
+@site-width: 960px;
+
+@padding: 24px;
+
+html, body {
+    height: 100%;
+    background-color: #ddd;
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.site-container {
+    margin: auto;
+    max-width: @site-width;
+    height: 100%;
+    background-color: white;
+    font-size: 0;
+}
+
+#sidebar, #content {
+    display: inline-block;
+    padding: @padding;
+    min-height: 100%;
+    vertical-align: top;
+    font-size: 16px;
+}
+
+#sidebar {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 30%;
+    background-color: @color-azure;
+    color: white;
+}
+
+#content {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 70%;
+}
+
+.count-cirle {
+    float: right;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    color: @color-azure;
+}
+
+.tree__node .tree__node {
+    margin-left: 12px;
+}
