@@ -13,6 +13,17 @@
             });
         });
 
+        me.depth = ko.computed(function () {
+            var depth = 0;
+            if (me.parent())
+                (deeper = function (parent) {
+                    depth = depth + 1;
+                    if (parent.parent())
+                        deeper(parent.parent());
+                })(me.parent());
+            return depth;
+        });
+
         me.isAncestorToOrIs = function (descendantId) {
             var retval = false;
             (goDeeper = function (category) {
@@ -26,7 +37,7 @@
 
         if (data.nodes)
             for (var i = 0; i < data.nodes.length; i++) {
-                me.nodes.push(new CategoryVM(data.nodes[i], me,postsRef));
+                me.nodes.push(new CategoryVM(data.nodes[i], me, postsRef));
             }
     }
     return CategoryVM;

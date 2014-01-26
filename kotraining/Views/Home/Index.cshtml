@@ -1,1 +1,89 @@
-﻿
+﻿<div style="max-width: 1170px; margin:0 auto;">
+    <h1>Code</h1>
+    <h2>Model</h2>
+    <p>Corresponds to a db entity</p>
+    <h2>Viewmodel</h2>
+    <p>Object responsible for part of a view, usually has observable proeprties, it doesn't matter how it's created, as long as it's a object. Should be nested in larger applications</p>
+    <pre>
+var v = {
+  prop: ko.observable(false),
+  propArray: ko.observableArray()
+}
+</pre>
+    <p>Good construct for creating viewmodels:</p>
+    <pre>
+var myVM = (function(){
+  var privateFunction = function(){}; //can only be accessed inside this scope, meaning that it can be used for creating private variables/functions for a vm.
+  var me = {
+  };
+  return me;
+})();
+</pre>
+    <h2>Observable</h2>
+    <p>
+        variable/property that contains a single value, be it an object, simple type or function, and informs any listener when it changes. Only informs when it changes itself,
+        not when its property changes, unless they're observable to.
+    </p>
+    <pre>var v = ko.observable(false);</pre>
+    <h2>ObservableArray</h2>
+    <p>An observable that contains an array and informs when it's modified (pushed to, items removed etc)</p>
+    <pre>var v = ko.observableArray(myArrayOrNothing);</pre>
+    <h2>Subscribe</h2>
+    <p>Used when you need code to react when a observable changes</p>
+    <pre>
+var v = ko.observable(false);
+v.subscribe(function(newVal){
+  alert('value of v is ' + newVal);
+});
+</pre>
+    <h2>Applybindings</h2>
+    <p>This is what tells your view to start listening to your VM. This should only be applied once, something is very wrong in your bindings if you have to apply it again. It can however be used to apply different "main" VMs to different html elements if you want only parts of your page to use knockout.</p>
+    <pre>ko.applyBindings(vm,htmlNode(optional));</pre>
+    <h1>View</h1>
+    <h2>Data-bind</h2>
+    <p>
+        Put data-bind attribute on element that should be binding to a vm. The data bind attribute takes the form of a javascript object literal and can use properties such as text,html,click,foreach,css,value(inputs) (class)
+    </p>
+    <h1>Put it together</h1>
+    <p>Model constructor:</p>
+    <pre>
+function Transaction(){
+  this.value
+}
+</pre>
+    <p>Viewmodel:</p>
+    <pre>
+var transactionsVM = {
+  transactions: ko.observableArray,
+  addTransaction: function(transaction){
+    transactionsVM.transactions.push(transaction); //We can push directly to the observableArray without executing it first
+  }
+};
+//Has to be added after literal since it will be evaluated on creation and we reference the literal itself.
+transactionsVM.totalValue = ko.computed(function(){
+  var value = 0;
+  //There are helper utils for working with/iterating over/filtering arrays
+  for(var i = 0; i < transactionsVM.transations().length; i++){ //We have to execute transactions to get the underlaying array
+    value += transactionsVM.transactions()[i].value;
+  }
+  return value;
+});
+</pre>
+    <p>View:</p>
+    <pre>
+&lt;ul data-bind="foreach: transactions"&gt;
+  &lt;li data-bind="text: value"&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p data-bind="text: totalValue"&lt;/p&gt;
+</pre>
+    <p>Applying magic:</p>
+    <pre>
+ko.applyBindings(transactionsVM);
+</pre>
+    <p>
+        This creates a view that lists an array of transactions and a row with total value of all the transactions
+    </p>
+    <h1>Documentation</h1>
+    <p>Debug <a href="http://www.knockmeout.net/2013/06/knockout-debugging-strategies-plugin.html">http://www.knockmeout.net/2013/06/knockout-debugging-strategies-plugin.html</a></p>
+    <p>Documentation <a href="http://knockoutjs.com/documentation/introduction.html">http://knockoutjs.com/documentation/introduction.html</a></p>
+</div>

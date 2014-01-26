@@ -1,20 +1,20 @@
 ﻿<script type="text/html" id="treenodetemplate">
-    <div class="tree__node">
-        <h6>
-            <span data-bind="text: title, click: $root.categoryClicked"></span>
-            <span data-bind="visible: nodes().length > 0, click: function(){ isOpen(!isOpen());}">+</span>
-            <span class="count-cirle" data-bind="text: posts().length, click: $root.categoryClicked"></span>
-        </h6>
-        <ul data-bind="visible: isOpen() && nodes().length > 0, template: {name: 'treenodetemplate', foreach: nodes}"></ul>
+    <div data-bind="attr: {'class': 'tree__node sidebaritem sidebaritem--subitem sidebaritem--actionable level' + depth()},css: {'sidebaritem--selected': $root.activeVM() === $data}">
+        <span data-bind="visible: nodes().length > 0, click: function(){ isOpen(!isOpen());}">+</span>
+        <span data-bind="text: title, click: $root.categoryClicked"></span>
+        <span class="count-cirle" data-bind="text: posts().length, click: $root.categoryClicked"></span>
     </div>
+    <!-- ko if: isOpen() && nodes().length > 0 -->
+    <!-- ko template: {name: 'treenodetemplate', foreach: nodes} --><!-- /ko -->
+    <!-- /ko -->
 </script>
 
 <script type="text/html" id="categorypickernodetemplate">
     <!-- ko foreach: data -->
     <div class="tree__node">
         <h6>
-            <span data-bind="text: title,click: function(){ $parent.post.category($data); }"></span>
             <span data-bind="visible: nodes().length > 0, click: function(){ isOpen(!isOpen());}">+</span>
+            <span data-bind="text: title,click: function(){ $parent.post.category($data); }"></span>
             <span class="count-cirle" data-bind="text: posts().length"></span>
         </h6>
         <ul data-bind="visible: isOpen() && nodes().length > 0, template: {name: 'categorypickernodetemplate', data:{data: nodes, post: $parent.post}}"></ul>
@@ -33,9 +33,15 @@
 </script>
 
 <script type="text/html" id="recentpostlistitemtemplate">
-    <li>
-        <span data-bind="text: postId"></span>
+    <li class="sidebaritem sidebaritem--subitem sidebaritem--actionable" data-bind="css: {'sidebaritem--selected': $root.activeVM() === $data}">
         <span data-bind="text: title, click: $parent.postClicked"></span>
+    </li>
+</script>
+
+<script type="text/html" id="taglistitemtemplate">
+    <li class="sidebaritem sidebaritem--subitem sidebaritem--actionable" data-bind="click: $root.tagClicked,css: {'sidebaritem--selected': $root.activeVM() === $data}">
+        <span data-bind="text: title"></span>
+        <span data-bind="text: items.length" class="count-cirle"></span>
     </li>
 </script>
 

@@ -22,7 +22,6 @@ li {
 #sidebar,
 #content {
     display: inline-block;
-    padding: 24px;
     min-height: 100%;
     vertical-align: top;
     font-size: 16px;
@@ -32,6 +31,7 @@ li {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    padding: 24px 0;
     width: 30%;
     background-color: #71b1d1;
     color: white;
@@ -41,18 +41,64 @@ li {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    padding: 24px;
     width: 70%;
 }
 
 .count-cirle {
     float: right;
-    width: 16px;
-    height: 16px;
+    width: 1.25em;
+    height: 1.25em;
     border-radius: 50%;
-    background-color: white;
+    background-color: #fff;
     color: #71b1d1;
+    text-align: center;
+    margin-top: 0.15em;
 }
 
 .tree__node .tree__node {
     margin-left: 12px;
+}
+
+.sidebaritem {
+    position: relative;
+    margin: 12px 0 0 0;
+    padding: 0 24px;
+    font-size: 22px;
+    line-height: 1.5em;
+}
+
+.sidebaritem i {
+    margin-right: 4px;
+}
+
+.sidebaritem.level1 {
+    padding-left: 36px;
+}
+
+.sidebaritem.level2 {
+    padding-left: 48px;
+}
+
+.sidebaritem--selected {
+    background-color: #98c6dd;
+}
+
+.sidebaritem--selected:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border: solid 0.75em transparent;
+    border-right-color: white;
+    content: "";
+}
+
+.sidebaritem--subitem {
+    margin: 0;
+    font-size: 16px;
+}
+
+.sidebaritem--actionable {
+    cursor: pointer;
 }

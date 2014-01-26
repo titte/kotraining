@@ -2,17 +2,12 @@
 <div class="site-container">
     <div id="sidebar">
         <a href="javascript:;" data-bind="click: newPost"><i class="glyphicon glyphicon-plus-sign"></i> Create</a>
-        <h4 data-bind="click: homeClicked">Home</h4>
-        <h4>Recent</h4>
+        <h4 class="sidebaritem sidebaritem--actionable" data-bind="click: homeClicked, css: {'sidebaritem--selected': $root.activeVM() === $root.posts()}"><i class="fa fa-home"></i>Home</h4>
+        <h4 class="sidebaritem"><i class="fa fa-clock-o"></i>Recent</h4>
         <ul data-bind="template: {name: 'recentpostlistitemtemplate',foreach: recentPosts}"></ul>
-        <h4>Tags</h4>
-        <ul data-bind="foreach: tags">
-            <li data-bind="click: $root.tagClicked">
-                <span data-bind="text: title"></span>
-                <span data-bind="text: items.length" class="count-cirle"></span>
-            </li>
-        </ul>
-        <h4>Categories</h4>
+        <h4 class="sidebaritem"><i class="fa fa-tags"></i>Tags</h4>
+        <ul data-bind="template: { name: 'taglistitemtemplate',foreach: tags}"></ul>
+        <h4 class="sidebaritem"><i class="fa fa-list-ul"></i>Categories</h4>
         <div data-bind="template: {name: 'treenodetemplate', foreach: categories}"></div>
     </div>
     <div id="content" data-bind="template: {data: activeVM,name: activeVM.templateType + 'template'}">
