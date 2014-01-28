@@ -28,6 +28,20 @@ var myVM = (function(){
     <h2>ObservableArray</h2>
     <p>An observable that contains an array and informs when it's modified (pushed to, items removed etc)</p>
     <pre>var v = ko.observableArray(myArrayOrNothing);</pre>
+    <h2>Computed</h2>
+    <p>
+        A computed is meant to return a value of any kind (simple type, object, array) based on other observables. This will notify any listener that it should reevaluate whenever one of the observables used in it changes.
+        A computed can not be created inside of or before a literal if it uses any properties of that literal. This is because the function you put into a computed will be executed as soon as it's created, resulting in a null reference for the literal object.
+    </p>
+    <pre>
+var me = {
+  firstName: ko.observable('first name'),
+  lastName: ko.observable('last name')
+};
+me.fullName = ko.computed(function(){
+  return me.firstName() + ' ' + me.lastName();
+});
+</pre>
     <h2>Subscribe</h2>
     <p>Used when you need code to react when a observable changes</p>
     <pre>
