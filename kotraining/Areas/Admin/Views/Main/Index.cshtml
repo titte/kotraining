@@ -1,0 +1,26 @@
+﻿
+<div class="site-container">
+    <div id="sidebar">
+
+    </div>
+    <div id="content">
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/knockout-3.0.0.js"></script>
+    <script src="~/Scripts/knockout.mapping-latest.debug.js"></script>
+    <script src="~/Scripts/VMs/adminVM.js"></script>
+    @* Add any additional VM files or other scripts here *@
+
+    <script>
+        //Perform any initialization code needed here and then apply your bindings
+    </script>
+}
+
+@section head {
+    <link href="~/Content/main.min.css" rel="stylesheet" />
+    @* Add any custom styling here *@
+}

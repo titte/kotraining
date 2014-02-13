@@ -62,13 +62,13 @@ v.subscribe(function(newVal){
     <p>Model constructor:</p>
     <pre>
 function Transaction(){
-  this.value
+  this.value = ko.observable()
 }
 </pre>
     <p>Viewmodel:</p>
     <pre>
 var transactionsVM = {
-  transactions: ko.observableArray,
+  transactions: ko.observableArray(),
   addTransaction: function(transaction){
     transactionsVM.transactions.push(transaction); //We can push directly to the observableArray without executing it first
   }
@@ -97,6 +97,15 @@ ko.applyBindings(transactionsVM);
     <p>
         This creates a view that lists an array of transactions and a row with total value of all the transactions
     </p>
+
+    <h1>Do it yourself</h1>
+    <p>
+        This project is setup with a MVC View (Index.cshtml) located in /Areas/Admin/Views/Main. You will reach this view by starting the project and appending /admin to the URL.
+        You can create your KnockoutJS views in this file, it also contains references to necessary framework/libraries that you will need. There is also a adminVM where you can start to write
+        your application logic. You will find the .less file for this project in /Content and you can continue to work here, or create a new .css file and add it to the "head" section of the index.cshtml file.
+    </p>
+    <p>You won't have to do anything ASP.NET MVC to work with knockout.</p>
+
     <h1>Documentation</h1>
     <p>Debug <a href="http://www.knockmeout.net/2013/06/knockout-debugging-strategies-plugin.html">http://www.knockmeout.net/2013/06/knockout-debugging-strategies-plugin.html</a></p>
     <p>Documentation <a href="http://knockoutjs.com/documentation/introduction.html">http://knockoutjs.com/documentation/introduction.html</a></p>
