@@ -58,6 +58,23 @@ v.subscribe(function(newVal){
     <p>
         Put data-bind attribute on element that should be binding to a vm. The data bind attribute takes the form of a javascript object literal and can use properties such as text,html,click,foreach,css,value(inputs) (class)
     </p>
+    <h3>The text binding</h3>
+    <p>The text binding will write the value of the property that it's bound to, or you can concatenate anything you want, concatenating text will work as a computed, it will re-write the text if any observable changes. Notice that we have to execute observables when concatenating but not when using a single observable</p>
+        <pre>
+&lt;p data-bind="text: oneObservable() + ' other text ' + secondObservable()"&gt; Concatenated text &lt;/p&gt;
+&lt;p data-bind="text: nameOfObservable}"&gt; Simple observable value &lt;/p&gt;
+    </pre>
+    <h3>The value binding</h3>
+    <p> The value binding works as the text binding but in a more obvious two-way fashion. It does however not support writing back to concatenated text.</p>
+    <pre>
+&lt;input type="text" data-bind="value: oneObservable" /&gt;
+</pre>
+    <h3>The click binding</h3>
+    <p>The click binding is a proeprty of the data-bind attribute that specifies a handler for a click on the element, this could be bound to a function on your VM/Model or be a inline function. Remember not to write () after the function name if you bind to a function on your VM, it will execute the function when parsing if you forget this.</p>
+    <pre>
+&lt;a href="javascript:;" data-bind="click: function(){ alert('I'm inline');}"&gt; Click me inline &lt;/a&gt;
+&lt;a href="javascript:;" data-bind="click: nameOfFunctionOnVM"&gt; Click me, on VM &lt;/a&gt;
+    </pre>
     <h1>Put it together</h1>
     <p>Model constructor:</p>
     <pre>
