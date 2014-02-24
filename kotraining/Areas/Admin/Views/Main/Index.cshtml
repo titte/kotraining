@@ -1,26 +1,68 @@
 ﻿
 <div class="site-container">
     <div id="sidebar">
-
+        <a id="btnCreate">Create</a>
+        <div class="sidebaritem">
+            Recent
+            <ul data-bind="foreach: recentList.recentPosts">
+                <li class="sidebaritem--subitem"><a data-bind="text: title, click:$parent.openItem"></a></li>
+            </ul>
+        </div>
+        <div class="sidebaritem">
+            Tags
+            <ul data-bind="foreach: recentList.tagPost">
+                <li class="sidebaritem--subitem" data-bind="text: tags"></li>
+            </ul>
+        </div>
+        <div class="sidebaritem">
+            Categories
+            <ul data-bind="foreach: categories">
+                <li class="sidebaritem--subitem" data-bind="text: name"></li>
+            </ul>
+        </div>
     </div>
+
     <div id="content">
+        <div id="frmCreate">
+            <form data-bind="submit:recentList.addItem">
+                <div id="createView" data-bind="with:recentList.postToAdd">
+                    <label>Title</label>
+                    <input id="theTitle" data-bind="value: title, valueUpdate: 'afterkeydown'  " />
+                    <br />
+                    <label>Tags</label>
+                    <input id="theTags" data-bind="value: tags, valueUpdate: 'afterkeydown'  " />
+                    <br />
+                    <label>Category</label>
+                    <select data-bind="foreach: category">
+                        <option data-bind="value:v,text:name"></option>
+                    </select>
+                    <br />
+                    <input type="submit" value="Spara" />
+                </div>
+            </form>
+        </div>
+        <div id="frmRecent">
+            <div id="recentView" data-bind="with:recentList.postToAdd">
+                <label>Title</label>
+                <input id="theTitle" data-bind="value: title, valueUpdate: 'afterkeydown'  " />
+            </div>
+        </div>
     </div>
-</div>
 
-@section scripts {
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/knockout-3.0.0.js"></script>
-    <script src="~/Scripts/knockout.mapping-latest.debug.js"></script>
-    <script src="~/Scripts/VMs/adminVM.js"></script>
-    @* Add any additional VM files or other scripts here *@
+    @section scripts {
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        <script src="~/Scripts/knockout-3.0.0.js"></script>
+        <script src="~/Scripts/knockout.mapping-latest.debug.js"></script>
+        <script src="~/Scripts/VMs/adminVM.js"></script>
+        @* Add any additional VM files or other scripts here *@
 
-    <script>
-        //Perform any initialization code needed here and then apply your bindings
-    </script>
-}
+        <script>
+            ko.applyBindings(AdminVm);
+        </script>
+    }
 
-@section head {
-    <link href="~/Content/main.min.css" rel="stylesheet" />
-    @* Add any custom styling here *@
-}
+    @section head {
+        <link href="~/Content/main.min.css" rel="stylesheet" />
+        @* Add any custom styling here *@
+    }
