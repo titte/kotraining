@@ -4,14 +4,14 @@
         <a id="btnCreate">Create</a>
         <div class="sidebaritem">
             Recent
-            <ul data-bind="foreach: recentList.recentPosts">
+            <ul data-bind="foreach: recentPosts">
                 <li class="sidebaritem--subitem"><a data-bind="text: title, click:$parent.openItem"></a></li>
             </ul>
         </div>
         <div class="sidebaritem">
             Tags
-            <ul data-bind="foreach: recentList.tagPost">
-                <li class="sidebaritem--subitem" data-bind="text: tags"></li>
+            <ul data-bind="foreach: tags">
+                <li class="sidebaritem--subitem" data-bind="text: name"></li>
             </ul>
         </div>
         <div class="sidebaritem">
@@ -24,8 +24,8 @@
 
     <div id="content">
         <div id="frmCreate">
-            <form data-bind="submit:recentList.addItem">
-                <div id="createView" data-bind="with:recentList.postToAdd">
+            <form data-bind="submit: addPost">
+                <div id="createView" data-bind="with:postToAdd">
                     <label>Title</label>
                     <input id="theTitle" data-bind="value: title, valueUpdate: 'afterkeydown'  " />
                     <br />
@@ -33,7 +33,7 @@
                     <input id="theTags" data-bind="value: tags, valueUpdate: 'afterkeydown'  " />
                     <br />
                     <label>Category</label>
-                    <select data-bind="foreach: category">
+                    <select data-bind="foreach: $parent.categories">
                         <option data-bind="value:v,text:name"></option>
                     </select>
                     <br />
@@ -41,13 +41,16 @@
                 </div>
             </form>
         </div>
+
         <div id="frmRecent">
-            <div id="recentView" data-bind="with:recentList.postToAdd">
+            <div id="recentView" data-bind="with:postToAdd">
                 <label>Title</label>
                 <input id="theTitle" data-bind="value: title, valueUpdate: 'afterkeydown'  " />
             </div>
         </div>
-    </div>
+
+    </div> @*content*@
+</div>
 
     @section scripts {
         @Scripts.Render("~/bundles/jquery")
@@ -56,10 +59,6 @@
         <script src="~/Scripts/knockout.mapping-latest.debug.js"></script>
         <script src="~/Scripts/VMs/adminVM.js"></script>
         @* Add any additional VM files or other scripts here *@
-
-        <script>
-            ko.applyBindings(AdminVm);
-        </script>
     }
 
     @section head {

@@ -10,56 +10,68 @@ $(document).ready(function () {
     });
 });
 
+// Using the Revealing pattern, where only the functions returned from the objects are exposed (vm is also self-instanciating)
+var vm = (function () {
 
-var categories = [{ name: "Ett", v: "1" }, { name: "Två", v: "2" }, { name: "Tre", v: "3" }];
+    var Post = function () {
+        var self = this;
+        self.title = ko.observable();
+        self.slug = ko.observable();
+        self.category = ko.observableArray(categories);
+        self.content = ko.observable();
+        self.tags = ko.observable();
+    };
 
-var PostVm = function () {
-    var self = this;
-    self.title = ko.observable();
-    self.slug = ko.observable();
-    self.category = ko.observableArray(categories);
-    self.content = ko.observable();
-    //this.tags = ko.observableArray();
-    self.tags = ko.observable();
+    function addPost() {
+        recentPosts.push(postToAdd());
+        tags.push(postToAdd.tags); // TODO: - Need to convert tags
+        postData = new Post();
+    };
 
-    $("#frmCreate").hide();
-    $("#frmRecent").hide();
+    function openItem(item) {
+        $("#frmCreate").hide();
+        $("#frmRecent").show();     // TODO: - Move view logic outside vm!
+        vm.postToAdd(item);
+    };
 
-    //self.openItem = function (item) {
-    //    $("#frmRecent").show();
-    //    self.title = item.title;
-    //};
-};
+    // TODO: Start - Replace with data from database
+    var categoryData = [{ name: "Ett", v: "1" }, { name: "Två", v: "2" }, { name: "Tre", v: "3" }]; 
+    var tagData = [{ name: "Tag1", v: "1" }, { name: "Tag2", v: "2" }]; 
+    var examplePost = new Post();
+    examplePost.title = 'Post no1';
+    examplePost.slug = '/';
+    examplePost.category = '1';
+    var recentPostData = [examplePost];
+    // TODO: End - Replace with data from database
 
-var AdminVm = {
+    var postData = new Post();
+    postData.title = 'Hello';
+    var postToAdd = ko.observable(postData);
+    var tags = ko.observableArray(tagData);
+    var categories = ko.observableArray(categoryData);
+    var recentPosts = ko.observableArray(recentPostData);
 
-    recentList: new function () {
-        this.recentPosts = ko.observableArray();
-        this.tagPost = ko.observableArray();
-        this.postToAdd = ko.observable(new PostVm());
-        //this.categories = PostVm.category;
-        this.addItem = function () {
-            this.recentList.recentPosts.push(this.recentList.postToAdd());
-            this.recentList.tagPost.push(this.recentList.postToAdd());
-            this.recentList.postToAdd(new PostVm());
-        },
-        this.openItem = function (item) {
-            $("#frmRecent").show();
-            AdminVm.postToAdd(item);
-        };
+    // Using the Revealing pattern, where only the functions returned from the objects are exposed
+    var vm = {
+        postToAdd : postToAdd,
+        recentPosts: recentPosts,
+        tags: tags,
+        categories: categories,
+        addPost: addPost,
+        openItem: openItem
+    };
 
-        //PostVm.category(categories);
-        //this.recentList.PostVm.category(categories);
-    }//,
-    //tagsList: new function() {
-    //    this.tagPost = ko.observableArray();
-    //    this.postToAdd = ko.observable(new PostVm());
-    //    this.addItem = function () {
-    //        this.tagsList.tagPost.push(this.tagsList.postToAdd());
-    //        //this.recentList.tagsList.push(this.recentList.postToAdd());
-    //        //this.tagsList.tagList.push("Kalle");
-    //        this.tagsList.postToAdd(new PostVm());
-    //    };
-    //}
+    return vm;
+})();
+ko.applyBindings(vm);
+
+// Debug stuff
+ko.bindingHandlers.debug =
+{
+    init: function (element, valueAccessor) {
+        console.log('Knockoutbinding:');
+        console.log(element);
+        console.log(valueAccessor());
+    }
 };
 
