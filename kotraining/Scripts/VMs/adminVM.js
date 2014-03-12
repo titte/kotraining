@@ -51,6 +51,19 @@ var vm = (function () {
     var categories = ko.observableArray(categoryData);
     var recentPosts = ko.observableArray(recentPostData);
 
+    var tagsFormatted = ko.computed({
+        read: function () {
+            var text = postToAdd.tags.slice(0, postToAdd.tags.length - 1).join(', ');  // Convert array to comma seperated string
+            return postToAdd.tags ? text : "";
+        },
+        write: function(text) {
+            var updatedTags = text.split(', '); // Convert comma seperated string to array
+            // iterate all posts and extract tags
+            //foreach 
+
+        }
+    });
+
     // Using the Revealing pattern, where only the functions returned from the objects are exposed
     var vm = {
         postToAdd : postToAdd,
