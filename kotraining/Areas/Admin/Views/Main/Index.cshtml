@@ -11,7 +11,7 @@
         <div class="sidebaritem">
             Tags
             <ul data-bind="foreach: tags">
-                <li class="sidebaritem--subitem" data-bind="text: name"></li>
+                <li class="sidebaritem--subitem" data-bind="text: $data"></li>
             </ul>
         </div>
         <div class="sidebaritem">
@@ -30,7 +30,7 @@
                     <input id="theTitle" data-bind="value: title, valueUpdate: 'afterkeydown'  " />
                     <br />
                     <label>Tags</label>
-                    <input id="theTags" data-bind="value: tags, valueUpdate: 'afterkeydown'  " />
+                    <input id="theTags" data-bind="value: tagsFormatted, valueUpdate: 'afterkeydown'  " />
                     <br />
                     <label>Category</label>
                     <select data-bind="foreach: $parent.categories">
